@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<yandexsearch version="1.0">
+    <request>
+        <query>| site:site.com/22935/ |
+            site:site.com/19055/ | site:site.com/22045/ |
+            site:site.com/21775/29 | site:site.com/21635/
+            | site:site.com/20735/ | site:site.com/19945/
+            | site:site.com/15355/
+        </query>
+        <page>0</page>
+        <sortby order="descending" priority="no">rlv</sortby>
+        <maxpassages></maxpassages>
+        <groupings>
+            <groupby attr="d" mode="deep" groups-on-page="10" docs-in-group="1" curcateg="-1"/>
+        </groupings>
+    </request>
+    <response date="030271541">
+        <reqid>1369613599-246433262873-ws35-975-XML</reqid>
+        <found priority="phrase">3</found>
+        <found priority="strict">3</found>
+        <found priority="all">3</found>
+        <found-human>Нашлось 3 ответа</found-human>
+        <results>
+            <grouping attr="d" mode="deep" groups-on-page="10" docs-in-group="1" curcateg="-1">
+                <found priority="phrase">3</found>
+                <found priority="strict">3</found>
+                <found priority="all">3</found>
+                <found-docs priority="phrase">9</found-docs>
+                <found-docs priority="strict">9</found-docs>
+                <found-docs priority="all">9</found-docs>
+                <found-docs-human>нашёл 9 ответов</found-docs-human>
+                <page first="1" last="3">0</page>
+                <group>
+                    <categ attr="d" name="site.com.0.UngroupSmall.1"/>
+                    <doccount>3</doccount>
+                    <relevance priority="phrase"/>
+                    <doc id="EC1DFFF42">
+                        <relevance priority="phrase"/>
+                        <url>http://site.com/19055/1/</url>
+                        <domain>site.com</domain>
+                        <title>SITE.COM - title</title>
+                        <headline>headline</headline>
+                        <modtime>111005T1853</modtime>
+                        <size>20353</size>
+                        <charset>windows-1251</charset>
+                        <properties>
+                            <_PassagesType>0</_PassagesType>
+                            <lang>ru</lang>
+                        </properties>
+                        <mime-type>text/html</mime-type>
+                        <saved-copy-url>saved site page</saved-copy-url>
+                    </doc>
+                </group>
+                <group>
+                    <categ attr="d" name="site.com.0"/>
+                    <doccount>3</doccount>
+                    <relevance priority="phrase"/>
+                    <doc id="8347482">
+                        <relevance priority="phrase"/>
+                        <url>http://site.com/19055/29/</url>
+                        <domain>site.com</domain>
+                        <title>title</title>
+                        <headline>headline</headline>
+                        <modtime>102217</modtime>
+                        <size>35648</size>
+                        <charset>windows-1251</charset>
+                        <properties>
+                            <_PassagesType>0</_PassagesType>
+                            <lang>ru</lang>
+                        </properties>
+                        <mime-type>text/html</mime-type>
+                        <saved-copy-url>cached site page</saved-copy-url>
+                    </doc>
+                </group>
+                <group>
+                    <categ attr="d" name="site.com.0.UngroupSmall.2"/>
+                    <doccount>3</doccount>
+                    <relevance priority="phrase"/>
+                    <doc id="ZAED2D0B27A63">
+                        <relevance priority="phrase"/>
+                        <url>http://site.com/19945/225/</url>
+                        <domain>site.com</domain>
+                        <title>title</title>
+                        <headline>headline</headline>
+                        <modtime>203224732</modtime>
+                        <size>33355</size>
+                        <charset>windows-1251</charset>
+                        <properties>
+                            <_PassagesType>0</_PassagesType>
+                            <lang>ru</lang>
+                        </properties>
+                        <mime-type>text/html</mime-type>
+                        <saved-copy-url>cached page</saved-copy-url>
+                    </doc>
+                </group>
+            </grouping>
+        </results>
+    </response>
+</yandexsearch>
