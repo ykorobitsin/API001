@@ -15,7 +15,7 @@ import java.util.Map;
 public class ConvertUtils {
 
     public static List<IdUrlModel> convertAdvertsToIdUrlModels(List<Object> adverts) {
-        List<IdUrlModel> models = new ArrayList<IdUrlModel>();
+        List<IdUrlModel> models = new ArrayList<>();
 
         for (Object advert : adverts) {
             //noinspection unchecked

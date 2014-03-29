@@ -17,7 +17,9 @@ public class IndexFilter {
             //noinspection unchecked
             Map<String, Object> advert = (Map<String, Object>) iterator.next();
 
-            if ((Boolean)advert.get("is_indexed")) {
+            //todo refactor
+            Object is_indexed = advert.get("is_indexed");
+            if (is_indexed != null && (Boolean) is_indexed) {
                 iterator.remove();
             }
         }

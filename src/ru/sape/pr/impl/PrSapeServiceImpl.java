@@ -3,6 +3,8 @@ package ru.sape.pr.impl;
 import de.timroes.axmlrpc.XMLRPCClient;
 import de.timroes.axmlrpc.XMLRPCException;
 import model.IdUrlModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.sape.pr.Constants;
 import ru.sape.pr.PrSapeService;
 import ru.sape.pr.utils.IndexFilter;
@@ -36,6 +38,8 @@ import static utils.ConvertUtils.convertAdvertsToIdUrlModels;
 
 public class PrSapeServiceImpl implements PrSapeService {
 
+    private final static Logger logger = LoggerFactory.getLogger(PrSapeServiceImpl.class);
+
     private static final int OPTIONS = FLAGS_ENABLE_COOKIES | FLAGS_FORWARD | FLAGS_NIL;
 
     static String XMLRPC_URL = "http://api.pr.sape.ru/xmlrpc/";
@@ -52,15 +56,25 @@ public class PrSapeServiceImpl implements PrSapeService {
     @Override
     public void authenticate() throws XMLRPCException {
         // authentication
+        logger.info("Sending authentication to pr.sape...");
+
         String username = appConfig.getProperty("pr.sape.username");
         String password = appConfig.getProperty("pr.sape.password");
         rpcClient.call(Constants.SAPE_PR_LOGIN, username, password);
+
+        logger.info("Authentication to pr.sape was send.");
     }
 
     @Override
     public List<IdUrlModel> getUnindexedAdverts() throws MalformedURLException, XMLRPCException {
+        logger.info("Start getting all adverts from pr.sape...");
         List<Object> adverts = getAllAdverts();
+        logger.info("All adverts were loaded from pr.sape.");
+
+        logger.info("Filtering " + adverts.size() + " adverts...");
         IndexFilter.filterIndexedAdverts(adverts);
+        logger.info("Adverts were filtered. Unindexed adverts: " + adverts.size());
+
         return convertAdvertsToIdUrlModels(adverts);
     }
 
@@ -76,8 +90,13 @@ public class PrSapeServiceImpl implements PrSapeService {
 
         List<Object> totalAdverts = new ArrayList<Object>();
         while (true) {
+            logger.info("Getting all adverts (page " + page + ", per page " + perPage + ")...");
+
             Object[] adverts = (Object[]) rpcClient.call(
                     Constants.GET_ALL_ADVERTS, filter, page, perPage, isGuest);
+
+            logger.info(adverts.length + " adverts were loaded.");
+
             totalAdverts.addAll(Arrays.asList(adverts));
 
             if (totalAdverts.size() == allAdvertsCount) {

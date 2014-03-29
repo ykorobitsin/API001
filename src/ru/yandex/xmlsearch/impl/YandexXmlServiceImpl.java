@@ -6,6 +6,8 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.yandex.xmlsearch.ParseYandexException;
 import ru.yandex.xmlsearch.YandexXmlService;
 import utils.ApplicationContext;
@@ -24,6 +26,8 @@ import java.util.Properties;
  */
 public class YandexXmlServiceImpl implements YandexXmlService {
 
+    private final static Logger logger = LoggerFactory.getLogger(YandexXmlServiceImpl.class);
+
     public static final int MAX_REQUEST_LENGTH = 6;
 
     private List<IndexModel> indexedAdverts;
@@ -32,16 +36,20 @@ public class YandexXmlServiceImpl implements YandexXmlService {
     private Properties appConfig;
 
     public YandexXmlServiceImpl() throws IOException {
-        indexedAdverts = new ArrayList<IndexModel>();
-        unindexedUrls = new ArrayList<String>();
+        indexedAdverts = new ArrayList<>();
+        unindexedUrls = new ArrayList<>();
 
         appConfig = ApplicationContext.getAppConfig();
     }
 
     @Override
     public void search(List<IdUrlModel> models) {
+        logger.info("Start searching unindexed advert in Yandex...");
+
         StringBuilder request = new StringBuilder(appConfig.getProperty("search.string"));
         List<IdUrlModel> tempAdverts = new ArrayList<IdUrlModel>();
+
+        logger.info("Composing queries...");
 
         int i = 0;
         for (Iterator<IdUrlModel> iterator = models.iterator(); iterator.hasNext(); ) {
@@ -76,8 +84,8 @@ public class YandexXmlServiceImpl implements YandexXmlService {
                     parseYandexException.printStackTrace();
                 }
             }
-
         }
+        logger.info("End searching unindexed advert in Yandex.");
     }
 
     void addUrlToRequest(StringBuilder request, String url, String concatenator) {
@@ -87,11 +95,15 @@ public class YandexXmlServiceImpl implements YandexXmlService {
     }
 
     List<String> sendRequest(StringBuilder request) throws ParseYandexException {
+        logger.info("Sending request to Yandex...");
+
         List<String> foundUrls = new ArrayList<String>();
         try {
             SAXBuilder saxBuilder = new SAXBuilder();
             Document document = saxBuilder.build(request.toString());
             try {
+                logger.info("Parsing response...");
+
                 List<Element> urlGroups = document.getRootElement().getChild("response")
                         .getChild("results").getChild("grouping").getChildren("group");
                 for (Element group : urlGroups) {
@@ -107,11 +119,16 @@ public class YandexXmlServiceImpl implements YandexXmlService {
         } catch (IOException e) {
             throw new ParseYandexException("Cannot get xml from url, request " + request, e);
         }
+
+        logger.info("End parsing response. Found urls: " + foundUrls.size());
         return foundUrls;
     }
 
     //todo select better name for this method
     void getIndexedAndUnindexedAdverts(List<IdUrlModel> tempAdverts, List<String> foundUrls) {
+        //todo  add checking for empty list
+
+        logger.info("Parsing indexed and unindexed urls..");
         for (IdUrlModel advert : tempAdverts) {
             List<String> urls = new ArrayList<String>();
 
@@ -130,6 +147,7 @@ public class YandexXmlServiceImpl implements YandexXmlService {
                 unindexedUrls.add(advert.getUrl());
             }
         }
+        logger.info("End parsing index and unindexed urls.");
     }
 
     @Override
