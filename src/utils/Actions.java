@@ -1,6 +1,6 @@
 package utils;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -150,12 +150,12 @@ public final class Actions {
         List<Object> expectedActionsList = Arrays.asList(expectedActions);
         ArrayList actualActions = getInstance().actions;
 
-        for (Object expectedAction : expectedActionsList) {
-            if (!actualActions.contains(expectedAction)) {
-                Assert.fail("Expected action <" + expectedAction + "> is not in actual actions :"
-                        + actualActions + ".");
-            }
-        }
+        expectedActionsList.stream()
+                .filter(expectedAction -> !actualActions.contains(expectedAction))
+                .forEach(expectedAction -> Assert.fail(
+                        "Expected action <" + expectedAction + "> is not in actual actions :"
+                                + actualActions + "."
+                ));
     }
 
     @Override

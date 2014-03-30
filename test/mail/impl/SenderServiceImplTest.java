@@ -1,9 +1,9 @@
 package mail.impl;
 
-import junit.framework.Assert;
-import model.IndexModel;
+import model.SearchableModel;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -41,7 +41,7 @@ public class SenderServiceImplTest {
         // Given
         service = new SenderServiceImpl() {
             @Override
-            StringBuilder appendIndexedAdvert(List<IndexModel> models) {
+            StringBuilder appendIndexedAdvert(List<SearchableModel> models) {
                 return new StringBuilder("indexedAdverts");
             }
 
@@ -69,10 +69,10 @@ public class SenderServiceImplTest {
     @Test
     public void testAppendIndexedAdvert() {
         // When
-        IndexModel indexModel1 = new IndexModel(1, Arrays.asList("url1"));
-        IndexModel indexModel2 = new IndexModel(2, Arrays.asList("url2", "url3", "url4"));
+        SearchableModel searchableModel1 = new SearchableModel(1, Arrays.asList("url1"));
+        SearchableModel searchableModel2 = new SearchableModel(2, Arrays.asList("url2", "url3", "url4"));
         StringBuilder actualStringBuilder = service.appendIndexedAdvert(
-                Arrays.asList(indexModel1, indexModel2));
+                Arrays.asList(searchableModel1, searchableModel2));
 
         // Then
         StringBuilder expectedStringBuilder = new StringBuilder(

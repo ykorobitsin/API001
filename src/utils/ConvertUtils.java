@@ -1,6 +1,6 @@
 package utils;
 
-import model.IdUrlModel;
+import model.AdvertModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,13 +14,16 @@ import java.util.Map;
  */
 public class ConvertUtils {
 
-    public static List<IdUrlModel> convertAdvertsToIdUrlModels(List<Object> adverts) {
-        List<IdUrlModel> models = new ArrayList<>();
+    public static List<AdvertModel> convertAdvertsToIdUrlModels(List<Object> adverts) {
+        List<AdvertModel> models = new ArrayList<>();
 
         for (Object advert : adverts) {
             //noinspection unchecked
             Map<String, Object> that = (Map<String, Object>) advert;
-            models.add(new IdUrlModel((Integer)that.get("id"), (String)that.get("placement_url")));
+            models.add(new AdvertModel(
+                    (Integer)that.get("id"),
+                    (String)that.get("placement_url"),
+                    (Boolean) that.get("is_indexed")));
         }
 
         return models;

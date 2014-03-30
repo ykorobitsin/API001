@@ -1,6 +1,6 @@
 package mail;
 
-import model.IndexModel;
+import model.SearchableModel;
 import org.apache.commons.mail.EmailException;
 
 import javax.mail.MessagingException;
@@ -13,6 +13,6 @@ import java.util.List;
  * Time: 10:03
  */
 public interface SenderService {
-    void prepareAndSend(List<IndexModel> models, List<String> unindexedUrls)
+    void prepareAndSend(List<SearchableModel> models, List<String> unindexedUrls)
             throws EmailException, MessagingException;
 }

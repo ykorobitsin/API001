@@ -1,11 +1,9 @@
-import mail.SenderService;
-import mail.impl.SenderServiceImpl;
-import model.IdUrlModel;
-import model.IndexModel;
-import ru.sape.pr.PrSapeService;
-import ru.sape.pr.impl.PrSapeServiceImpl;
-import ru.yandex.xmlsearch.YandexXmlService;
-import ru.yandex.xmlsearch.impl.YandexXmlServiceImpl;
+import model.AdvertModel;
+import model.SearchableModel;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import service.ru.sape.pr.PrSapeService;
+import service.ru.yandex.xmlsearch.xmlsearch.YandexXmlService;
 
 import java.util.List;
 
@@ -19,20 +17,17 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            PrSapeService prSapeServiceImpl = new PrSapeServiceImpl();
-            prSapeServiceImpl.authenticate();
-            List<IdUrlModel> unindexedAdverts = prSapeServiceImpl.getUnindexedAdverts();
+            ApplicationContext context = new ClassPathXmlApplicationContext("services.xml");
+            PrSapeService prSapeServiceImpl = (PrSapeService) context.getBean("prSapeService");
+            List<AdvertModel> unindexedAdverts = prSapeServiceImpl.getUnindexedAdverts();
 
-            YandexXmlService yandexXmlServiceImpl = new YandexXmlServiceImpl();
-            yandexXmlServiceImpl.search(unindexedAdverts);
+            YandexXmlService yandexXmlServiceImpl =
+                    (YandexXmlService) context.getBean("yandexXmlService");
+            List<List<SearchableModel>> models = yandexXmlServiceImpl.search(unindexedAdverts);
 
-            List<IndexModel> indexedAdverts = yandexXmlServiceImpl.getIndexedAdverts();
-            List<String> unindexedUrls = yandexXmlServiceImpl.getUnindexedUrls();
-            SenderService mailService = new SenderServiceImpl();
-            mailService.prepareAndSend(indexedAdverts, unindexedUrls);
-
-            //todo need to send request to yandex webmaster to index pages
-            //System.out.println(adverts);
+            //todo implement
+            //SenderService mailService = new SenderServiceImpl();
+            //mailService.prepareAndSend(models);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -12,4 +12,5 @@ dependencies {
     compile group: 'javax.servlet', name: 'servlet-api', version: '2.5'
     compile group: 'org.jdom', name: 'jdom2', version: '2.0.5'
     compile group: 'org.mockito', name: 'mockito-all', version: '1.9.5'
+    compile group: 'org.springframework', name: 'spring-context', version: '4.0.2.RELEASE'
 }

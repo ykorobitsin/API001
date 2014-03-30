@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:application.properties"/>
+    </bean>
+
+    <bean name="prSapeService" class="service.ru.sape.pr.impl.PrSapeServiceImpl">
+        <property name="username" value="${pr.sape.username}"/>
+        <property name="password" value="${pr.sape.password}"/>
+        <property name="platformId" value="${pr.sape.platform_id}"/>
+    </bean>
+
+    <bean name="yandexXmlService" class="service.ru.yandex.xmlsearch.xmlsearch.impl.YandexXmlServiceImpl">
+        <property name="searchString" value="${yandex.xmlsearch.search_string}"/>
+    </bean>
+
+</beans>

@@ -1,16 +1,14 @@
 package mail.impl;
 
 import mail.SenderService;
-import model.IndexModel;
+import model.SearchableModel;
 import org.apache.commons.mail.EmailException;
-import utils.ApplicationContext;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
@@ -35,20 +33,21 @@ public class SenderServiceImpl implements SenderService {
     }
 
     void initialize() throws EmailException, IOException, MessagingException {
-        Properties appConfig =  ApplicationContext.getAppConfig();
+        //todo set properties through spring
 
         props = new Properties();
         session = Session.getDefaultInstance(props, null);
         message = new MimeMessage(session);
-        message.setFrom(new InternetAddress(appConfig.getProperty("email.from")));
+        //todo
+        /*message.setFrom(new InternetAddress(appConfig.getProperty("email.from")));
         message.setRecipient(
-                Message.RecipientType.TO, new InternetAddress(appConfig.getProperty("email.to")));
+                Message.RecipientType.TO, new InternetAddress(appConfig.getProperty("email.to")));*/
         message.setSubject("Message from google app engine");
     }
 
     @Override
     public void prepareAndSend(
-            List<IndexModel> indexedModels, List<String> unindexedUrls)
+            List<SearchableModel> indexedModels, List<String> unindexedUrls)
             throws EmailException, MessagingException {
 
         StringBuilder indexedAdverts = appendIndexedAdvert(indexedModels);
@@ -68,10 +67,10 @@ public class SenderServiceImpl implements SenderService {
     }
 
     //todo refactor
-    StringBuilder appendIndexedAdvert(List<IndexModel> models) {
+    StringBuilder appendIndexedAdvert(List<SearchableModel> models) {
         StringBuilder stringBuilder = new StringBuilder("<table>");
 
-        for (IndexModel model : models) {
+        for (SearchableModel model : models) {
             List<String> urls = model.getUrls();
             stringBuilder.append("<tr>");
 
