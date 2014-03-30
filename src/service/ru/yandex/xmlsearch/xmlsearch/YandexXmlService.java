@@ -16,5 +16,5 @@ public interface YandexXmlService {
     /**
      * Returns list of indexed urls.
      */
-    List<List<SearchableModel>> search(List<AdvertModel> models);
+    model.SearchResultModel search(List<AdvertModel> models);
 }

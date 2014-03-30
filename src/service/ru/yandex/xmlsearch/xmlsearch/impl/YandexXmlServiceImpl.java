@@ -1,6 +1,7 @@
 package service.ru.yandex.xmlsearch.xmlsearch.impl;
 
 import model.AdvertModel;
+import model.SearchResultModel;
 import model.SearchableModel;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -32,19 +33,13 @@ public class YandexXmlServiceImpl implements YandexXmlService {
 
     private String searchString;
 
-    private List<SearchableModel> indexedAdverts;
-    private List<SearchableModel> unindexedAdverts;
-
-    public YandexXmlServiceImpl() {
-        indexedAdverts = new ArrayList<>();
-        unindexedAdverts = new ArrayList<>();
-    }
-
     @Override
-    public List<List<SearchableModel>> search(List<AdvertModel> models) {
+    public SearchResultModel search(List<AdvertModel> models) {
         logger.info("Start searching unindexed advert in Yandex...");
 
         StringBuilder request = new StringBuilder(searchString);
+        List<SearchableModel> indexedAdverts = new ArrayList<>();
+        List<SearchableModel> unindexedAdverts = new ArrayList<>();
         List<AdvertModel> tempAdverts = new ArrayList<>();
 
         logger.info("Composing queries...");
@@ -59,7 +54,7 @@ public class YandexXmlServiceImpl implements YandexXmlService {
             i++;
 
             if (i > MAX_REQUEST_LENGTH) {
-                searchAdverts(request, tempAdverts);
+                searchAdverts(request, tempAdverts, indexedAdverts, unindexedAdverts);
                 tempAdverts.clear();
                 request = new StringBuilder(searchString);
                 i = 0;
@@ -67,21 +62,24 @@ public class YandexXmlServiceImpl implements YandexXmlService {
             }
 
             if (!iterator.hasNext()) {
-                searchAdverts(request, tempAdverts);
+                searchAdverts(request, tempAdverts, indexedAdverts, unindexedAdverts);
             }
         }
 
         logger.info("End searching unindexed advert in Yandex.");
-        return Arrays.asList(indexedAdverts, unindexedAdverts);
+        return new SearchResultModel(indexedAdverts, unindexedAdverts);
     }
 
-    void searchAdverts(StringBuilder request, List<AdvertModel> tempAdverts) {
+    void searchAdverts(
+            StringBuilder request, List<AdvertModel> tempAdverts,
+            List<SearchableModel> indexedAdverts, List<SearchableModel> unindexedAdverts) {
+
         try {
             List<String> foundUrls = sendRequest(request);
             if (foundUrls.isEmpty()) {
                 return;
             }
-            parseSearchResults(tempAdverts, foundUrls);
+            parseSearchResults(indexedAdverts, unindexedAdverts, tempAdverts, foundUrls);
         } catch (ParseYandexException parseYandexException) {
             parseYandexException.printStackTrace();
         }
@@ -123,7 +121,10 @@ public class YandexXmlServiceImpl implements YandexXmlService {
         return foundUrls;
     }
 
-    void parseSearchResults(List<AdvertModel> tempAdverts, List<String> foundUrls) {
+    void parseSearchResults(
+            List<SearchableModel> indexedAdverts, List<SearchableModel> unindexedAdverts,
+            List<AdvertModel> tempAdverts, List<String> foundUrls) {
+
         for (AdvertModel advert : tempAdverts) {
             List<String> indexedUrls = new ArrayList<>();
             String advertUrl = advert.getUrl().replaceAll(END_URL_REGEXP, "$1");

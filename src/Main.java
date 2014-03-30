@@ -1,5 +1,5 @@
 import model.AdvertModel;
-import model.SearchableModel;
+import model.SearchResultModel;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import service.ru.sape.pr.PrSapeService;
@@ -23,7 +23,7 @@ public class Main {
 
             YandexXmlService yandexXmlServiceImpl =
                     (YandexXmlService) context.getBean("yandexXmlService");
-            List<List<SearchableModel>> models = yandexXmlServiceImpl.search(unindexedAdverts);
+            SearchResultModel models = yandexXmlServiceImpl.search(unindexedAdverts);
 
             //todo implement
             //SenderService mailService = new SenderServiceImpl();
